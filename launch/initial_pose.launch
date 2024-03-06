@@ -1,0 +1,3 @@
+<launch>
+    <node pkg="initial_pose" type="initial_pose.py"  name="initial_pose" output="screen"> </node>   
+</launch>
