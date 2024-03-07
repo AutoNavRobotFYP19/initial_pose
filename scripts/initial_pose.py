@@ -23,29 +23,34 @@ count = 0
 state = 0
 
 def cb_initial_gps(data):
+    global state
+    global count
+
     if (count < 10):
-        init_gps_x[count] = data.point.x
-        init_gps_x[count] = data.point.y
-    if (count > 10 and state == 0):
-        rospy.loginfo("Completed Collecting Data")
+        init_gps_x.append(data.point.x)
+        init_gps_y.append(data.point.y)
+        count += 1
+
+    elif (count >= 10 and state == 0):
+        state = 1
         INIT_GPS_X = np.mean(init_gps_x)
         INIT_GPS_Y = np.mean(init_gps_y)
 
-        INIT_MAP_X = slope_x*X_GPS + intercept_x
-        INIT_MAP_Y = slope_y*Y_GPS + intercept_y
+        INIT_MAP_X = slope_x*INIT_GPS_X + intercept_x
+        INIT_MAP_Y = slope_y*INIT_GPS_Y + intercept_y
 
-        init_pose_file_path = os.path.join(file_pkg, "robopose/robot_position.txt")
+        init_pose_file_path = os.path.join(file_pkg, "robopose/initial.txt")
 
         if os.path.exists(init_pose_file_path):
             init_pose_file = open(init_pose_file_path, "w")
-            init_pose_file.write(str(INIT_MAP_X) + str(INIT_MAP_Y) + " 0 0 0 0")
+            init_pose_file.write(str(INIT_MAP_X) + " " + str(INIT_MAP_Y) + " 0 0 0 0")
             init_pose_file.close()
 
         else:
             print("File not found!")
-
-        rospy.loginfo("Completed Collecting Data")
-        state = 1
+     
+    elif (state == 1):
+        rospy.loginfo("\u001b[32m Completed Collecting Data \u001b[37m")
     
 
 
