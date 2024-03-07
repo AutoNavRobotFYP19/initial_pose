@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env
 import rospy
 import rospkg
 import os
@@ -8,6 +8,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
 from std_msgs.msg import String
+from geometry_msgs.msg import PointStamped
 
 time = []
 x_map = []
@@ -15,8 +16,46 @@ x_gps = []
 y_map = []
 y_gps = []
 
+init_gps_x = []
+init_gps_y = []
+
+count = 0
+state = 0
+
+def cb_initial_gps(data):
+    if (count < 10):
+        init_gps_x[count] = data.point.x
+        init_gps_x[count] = data.point.y
+    if (count > 10 and state == 0):
+        rospy.loginfo("Completed Collecting Data")
+        INIT_GPS_X = np.mean(init_gps_x)
+        INIT_GPS_Y = np.mean(init_gps_y)
+
+        INIT_MAP_X = slope_x*X_GPS + intercept_x
+        INIT_MAP_Y = slope_y*Y_GPS + intercept_y
+
+        init_pose_file_path = os.path.join(file_pkg, "robopose/robot_position.txt")
+
+        if os.path.exists(init_pose_file_path):
+            init_pose_file = open(init_pose_file_path, "w")
+            init_pose_file.write(str(INIT_MAP_X) + str(INIT_MAP_Y) + " 0 0 0 0")
+            init_pose_file.close()
+
+        else:
+            print("File not found!")
+
+        rospy.loginfo("Completed Collecting Data")
+        state = 1
+    
+
+
+def listener():
+    rospy.init_node("initial_pose", anonymous = True)
+    rospy.Subscriber('/robot_rtk_xyz', PointStamped, cb_initial_gps)
+    rospy.spin()    #run the node continunously until shutdown
+
+
 if __name__ == '__main__':
-    rospy.init_node('initial_pose')
 
     #open the robot_position file
     rospack = rospkg.RosPack()
@@ -67,8 +106,15 @@ if __name__ == '__main__':
     print("Y axis")
     print('slope:', slope_y, 'intercept:', intercept_y, 'correlation:', r_y)
 
-    X_REG = slope_x*X_GPS + intercept_x
-    Y_REG = slope_y*Y_GPS + intercept_y
+    # X_REG = slope_x*X_GPS + intercept_x
+    # Y_REG = slope_y*Y_GPS + intercept_y
+
+    try:
+        listener()
+    except rospy.ROSInterruptException:
+        pass
+
+
 
     
 
