@@ -4,4 +4,5 @@
 
     <!-- launch robot heading package -->
     <node pkg="initial_pose" type="robot_heading"  name="robot_heading" output="screen"> </node> 
+        <param name="map_mode" value="false" type="bool" /> 
 </launch>
