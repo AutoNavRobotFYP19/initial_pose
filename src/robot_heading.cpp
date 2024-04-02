@@ -106,7 +106,7 @@ int main( int argc, char **argv) {
                 */
                 imu_file.open(imu_file_path, std::ios::in);
                 if (!imu_file.is_open()) {
-                    std::cerr << "Error: Could not open \"" << imu_file_path << "\" for writing." << std::endl;
+                    std::cerr << "Error: Could not open \"" << imu_file_path << "\" for reading." << std::endl;
                 }
 
                 // read the initial heading from the file
@@ -118,12 +118,26 @@ int main( int argc, char **argv) {
 
                 std::cout << "\u001b[33mRobot Yaw: " << yaw << "\u001b[37m" <<std::endl;
 
+                //read current value in 'robot_pose/initial.txt'
+                init_pose_file.open(init_pose_file_path, std::ios::in);    
+                if (!init_pose_file.is_open()) {
+                    std::cerr << "Error: Could not open \"" << init_pose_file_path << "\" for reading." << std::endl;
+                }  
+                // read the current value from the file
+                std::string val;
+                std::string new_val;
+                std::getline(init_pose_file, val);
+                for  (int i = 0; i < val.length() - 1; i++) {
+                    new_val= new_val + val[i];
+                }
+                init_pose_file.close();       
+
                 // write the yaw to 'robot_pose/initial.txt'
                 init_pose_file.open(init_pose_file_path, std::ios::out);
                 if (!init_pose_file.is_open()) {
                     std::cerr << "Error: Could not open \"" << init_pose_file_path << "\" for writing." << std::endl;
                 }    
-                init_pose_file << "0 0 0 0 0 " << yaw << std::endl;            
+                init_pose_file << new_val << yaw << std::endl;            
             }
 
             imu_file.close();
