@@ -62,6 +62,8 @@ double calc_robot_heading (double init_heading, double curr_heading)
     if (diff_deg > 360.00) {
         diff_deg = diff_deg - 360.00;
     }
+
+    diff_deg = 360 - diff_deg;
     std::cout << "Difference: " << diff_deg << std::endl;
 
     // convert degrees to radians
