@@ -1,0 +1,7 @@
+<launch>
+    <!-- get GPS data -->
+    <node pkg="rtk_gps_node" type="position_xyz.py" name="robot_gps"  output="screen"> </node> 
+
+    <!-- get initial GPS location before starting mapping -->
+    <node pkg="initial_pose" type="mapping_stage_pose" name="mapping_stage_pose"  output="screen"> </node> 
+</launch>
