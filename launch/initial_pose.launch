@@ -3,11 +3,11 @@
     <node pkg="rtk_gps_node" type="position_xyz.py" name="robot_gps"  output="screen"> </node> 
 
     <!-- launch arduino rosserial -->
-    <node pkg="rosserial_python" type="serial_node.py" name="arduino_1" args ="/dev/ttyACM1"/>
+    <node pkg="rosserial_python" type="serial_node.py" name="arduino_1" args ="/dev/ttyUSB0"/>
 
     <node pkg="initial_pose" type="initial_pose.py"  name="initial_pose" output="screen"> </node>   
 
     <!-- launch robot heading package -->
-    <node pkg="initial_pose" type="robot_heading"  name="robot_heading" output="screen"> </node> 
-        <param name="map_mode" value="false" type="bool" />
+    <!-- <node pkg="initial_pose" type="robot_heading"  name="robot_heading" output="screen"> </node> 
+        <param name="map_mode" value="false" type="bool" /> -->
 </launch>

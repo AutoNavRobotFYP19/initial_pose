@@ -139,6 +139,7 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(robot_heading src/robot_heading.cpp)
+add_executable(mapping_stage_pose src/mapping_stage_pose.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -152,6 +153,9 @@ add_executable(robot_heading src/robot_heading.cpp)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(robot_heading
+  ${catkin_LIBRARIES}
+)
+target_link_libraries(mapping_stage_pose
   ${catkin_LIBRARIES}
 )
 
