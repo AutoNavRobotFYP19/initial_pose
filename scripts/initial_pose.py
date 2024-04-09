@@ -42,8 +42,14 @@ def cb_initial_gps(data):
         init_pose_file_path = os.path.join(file_pkg, "robopose/initial.txt")
 
         if os.path.exists(init_pose_file_path):
+            init_pose_file = open(init_pose_file_path, "r")
+            line = init_pose_file.readline()
+            pose_vals = line.split(" ") # get the imu yaw value at pose_vals[5]
+            init_pose_file.close()
+            
             init_pose_file = open(init_pose_file_path, "w")
-            init_pose_file.write(str(INIT_MAP_X) + " " + str(INIT_MAP_Y) + " 0 0 0 0")
+            init_pose_file.write(str(INIT_MAP_X) + " " + str(INIT_MAP_Y) + " 0 0 0 " + pose_vals[5])
+            print("\u001b[35mMap X:" + str(INIT_MAP_X) + "  Map Y:" +  str(INIT_MAP_Y) + "\u001b[37m")
             init_pose_file.close()
 
         else:
