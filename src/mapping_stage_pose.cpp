@@ -30,8 +30,8 @@ int arr_pos = 0;
 // double initial_lat[END_VAL - START_VAL];
 // double initial_long[END_VAL - START_VAL];
 
-long double lat;
-long double lon;
+double lat;
+double lon;
 /* 
     @brief              callback function for '/robot_rtk_gps' subscriber topic
  */
@@ -43,7 +43,7 @@ void gps_location_cb(const sensor_msgs::NavSatFix::ConstPtr& msg)
         // initial_long[arr_pos] = (double)msg->longitude;
         lat = msg->latitude;
         lon = msg->longitude;
-        ROS_INFO("Latitude: %Lf, Longitude: %Lf", lat, lon);
+        ROS_INFO("Latitude: %f, Longitude: %f", lat, lon);
     }
     count++;
     arr_pos++;
@@ -89,7 +89,7 @@ int main( int argc, char **argv) {
             // double lat_avg = calc_average(initial_lat, END_VAL - START_VAL);
             // double long_avg = calc_average(initial_long, END_VAL - START_VAL);
 
-            ROS_INFO("\u001b[36mFinal Latitude: %Lf, Longitude: %Lf\u001b[37m", lat, lon);
+            ROS_INFO("\u001b[36mFinal Latitude: %f, Longitude: %f\u001b[37m", lat, lon);
 
             // save the initial gps location to 'initial_gps_location.txt'
             gps_file.open(gps_file_path, std::ios::out);
@@ -97,8 +97,10 @@ int main( int argc, char **argv) {
                 std::cerr << "Error: Could not open \"" << gps_file_path << "\" for writing." << std::endl;
             } 
 
-            // gps_file << lat_avg << " " << long_avg << std::endl;
-            gps_file <<  lat << " " << lon << std::endl;
+            std::string s_lat = std::to_string(lat);
+            std::string s_lon = std::to_string(lon);
+
+            gps_file <<  s_lat << " " << s_lon << std::endl;
 
             gps_file.close();
             break;        
