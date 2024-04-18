@@ -18,7 +18,7 @@
 #define END_VAL     20
 
 //save file location for IMU data
-std::string gps_file_path = ros::package::getPath("data_base") + "/robopose/initial_gps_location.txt";
+std::string gps_file_path = ros::package::getPath("data_base") + "/robopose/rtk_init.txt";
 std::fstream gps_file;
 
 // pose initialization
@@ -27,8 +27,8 @@ std::fstream init_file;
 
 int count = 0;
 int arr_pos = 0;
-// double initial_lat[END_VAL - START_VAL];
-// double initial_long[END_VAL - START_VAL];
+double initial_lat[END_VAL - START_VAL];
+double initial_long[END_VAL - START_VAL];
 
 double lat;
 double lon;
@@ -38,15 +38,15 @@ double lon;
 void gps_location_cb(const sensor_msgs::NavSatFix::ConstPtr& msg)
 {   
     // ignore the first few seconds of data
-    if (count > START_VAL) {
-        // initial_lat[arr_pos] = (double)msg->latitude;
-        // initial_long[arr_pos] = (double)msg->longitude;
-        lat = msg->latitude;
-        lon = msg->longitude;
-        ROS_INFO("Latitude: %f, Longitude: %f", lat, lon);
+    if (count >= START_VAL && count < END_VAL) {
+        initial_lat[arr_pos] = (double)msg->latitude;
+        initial_long[arr_pos] = (double)msg->longitude;
+        // lat = msg->latitude;
+        // lon = msg->longitude;
+        ROS_INFO("Latitude: %f, Longitude: %f", msg->latitude, msg->longitude);
+        arr_pos++;
     }
     count++;
-    arr_pos++;
 }
 
 /* 
@@ -84,10 +84,10 @@ int main( int argc, char **argv) {
 
     
     while (ros::ok()) {
-        if (count > END_VAL) {
+        if (count >= END_VAL) {
             // calculate the mean value for latitudes and longitudes
-            // double lat_avg = calc_average(initial_lat, END_VAL - START_VAL);
-            // double long_avg = calc_average(initial_long, END_VAL - START_VAL);
+            lat = calc_average(initial_lat, END_VAL - START_VAL);
+            lon = calc_average(initial_long, END_VAL - START_VAL);
 
             ROS_INFO("\u001b[36mFinal Latitude: %f, Longitude: %f\u001b[37m", lat, lon);
 
@@ -99,8 +99,9 @@ int main( int argc, char **argv) {
 
             std::string s_lat = std::to_string(lat);
             std::string s_lon = std::to_string(lon);
+            std::string s_alt = "22.529253";
 
-            gps_file <<  s_lat << " " << s_lon << std::endl;
+            gps_file <<  s_lat << " " << s_lon << " " << s_alt << std::endl;
 
             gps_file.close();
             break;        
