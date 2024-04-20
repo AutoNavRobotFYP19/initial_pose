@@ -79,9 +79,9 @@ if __name__ == '__main__':
                 data = line.strip().split(",") 
                 time.append(float(data[0]))
                 x_map.append(float(data[1]))
-                x_gps.append(float(data[5]))
+                x_gps.append(float(data[4]))
                 y_map.append(float(data[2]))
-                y_gps.append(float(data[4]))
+                y_gps.append(float(data[5]))
     else:
         print("File not found!")
 
