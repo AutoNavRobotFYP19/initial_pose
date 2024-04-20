@@ -1,0 +1,6 @@
+<launch>
+    <node pkg="rosserial_python" type="serial_node.py" name="arduino_1" args ="/dev/ttyUSB0"/>
+    <node pkg="initial_pose" type="robot_heading"  name="robot_heading" output="screen"/>
+        <param name="map_mode" value="false" type="bool" /> 
+
+</launch>

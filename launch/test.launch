@@ -1,4 +1,0 @@
-<launch>
-    <node pkg="initial_pose" type="initial_pose.py"  name="initial_pose" output="screen"> </node>   
-    <node pkg="rtk_gps_node" type="position_xyz.py" name="robot_gps"  output="screen"> </node> 
-</launch>
