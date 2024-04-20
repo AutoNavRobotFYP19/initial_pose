@@ -22,16 +22,19 @@ init_gps_y = []
 count = 0
 state = 0
 
+gps_count = 15
+
 def cb_initial_gps(data):
     global state
     global count
+    global gps_count
 
-    if (count < 10):
+    if (count < gps_count):
         init_gps_x.append(data.point.x)
         init_gps_y.append(data.point.y)
         count += 1
 
-    elif (count >= 10 and state == 0):
+    elif (count >= gps_count and state == 0):
         state = 1
         INIT_GPS_X = np.mean(init_gps_x)
         INIT_GPS_Y = np.mean(init_gps_y)
