@@ -43,8 +43,10 @@ void gps_location_cb(const sensor_msgs::NavSatFix::ConstPtr& msg)
         initial_long[arr_pos] = (double)msg->longitude;
         // lat = msg->latitude;
         // lon = msg->longitude;
-        ROS_INFO("Latitude: %f, Longitude: %f", msg->latitude, msg->longitude);
+        ROS_INFO("Latitude: %.12f, Longitude: %.12f", msg->latitude, msg->longitude);
         arr_pos++;
+    } else {
+        ROS_INFO("Waiting for stable GPS data");
     }
     count++;
 }
@@ -97,11 +99,14 @@ int main( int argc, char **argv) {
                 std::cerr << "Error: Could not open \"" << gps_file_path << "\" for writing." << std::endl;
             } 
 
-            std::string s_lat = std::to_string(lat);
-            std::string s_lon = std::to_string(lon);
-            std::string s_alt = "22.529253";
+            // std::string s_lat = std::to_string(lat);
+            // std::string s_lon = std::to_string(lon);
+            // std::string s_alt = "22.529253";
+            double alt = 22.529253;
 
-            gps_file <<  s_lat << " " << s_lon << " " << s_alt << std::endl;
+            gps_file <<  std::fixed << std::setprecision(12) << lat << " " << lon << " " << alt << std::endl;
+
+
 
             gps_file.close();
             break;        
