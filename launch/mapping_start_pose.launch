@@ -4,13 +4,13 @@
     <!-- <node pkg="rtk_gps_node" type="geo_to_enu.py" name="robot_gps"  output="screen"> </node> -->
     <node pkg="rtk_gps_node" type="gps.py" name="robot_gps"  output="screen"> </node> 
 
-    <!-- launch arduino rosserial -->
-    <node pkg="rosserial_python" type="serial_node.py" name="arduino_1" args ="/dev/ttyUSB0"/>
-
     <!-- MAPPING: get initial GPS location before starting mapping -->
     <node pkg="initial_pose" type="mapping_stage_pose" name="mapping_stage_pose"  output="screen"> </node> 
 
+    <!-- launch arduino rosserial -->
+    <!-- <node pkg="rosserial_python" type="serial_node.py" name="arduino_1" args ="/dev/ttyUSB0"/> -->
+
     <!-- NAVIGATION: get the heading of robot -->
-    <node pkg="initial_pose" type="robot_heading"  name="robot_heading" output="screen"> </node> 
-        <param name="map_mode" value="true" type="bool" />
+    <!-- <node pkg="initial_pose" type="robot_heading"  name="robot_heading" output="screen"> </node> 
+        <param name="map_mode" value="true" type="bool" /> -->
 </launch>

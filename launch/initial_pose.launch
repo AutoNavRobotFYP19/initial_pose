@@ -1,15 +1,14 @@
 <launch>
     <!-- get GPS data -->
-    <!-- <node pkg="rtk_gps_node" type="position_xyz.py" name="robot_gps"  output="screen"> </node>  -->
     <node pkg="rtk_gps_node" type="geo_to_enu.py" name="robot_gps"  output="screen"> </node>
+
+    <!-- NAVIGATION: get the position of robot  -->
+    <node pkg="initial_pose" type="initial_pose.py"  name="initial_pose" output="screen"> </node>  
 
     <!-- launch arduino rosserial -->
     <node pkg="rosserial_python" type="serial_node.py" name="arduino_1" args ="/dev/ttyUSB0"/>
 
     <!-- NAVIGATION: get the heading of robot -->
     <node pkg="initial_pose" type="robot_heading"  name="robot_heading" output="screen"> </node> 
-        <param name="map_mode" value="false" type="bool" />
-
-    <!-- NAVIGATION: get the position of robot  -->
-    <node pkg="initial_pose" type="initial_pose.py"  name="initial_pose" output="screen"> </node>   
+        <param name="map_mode" value="false" type="bool" /> 
 </launch>
